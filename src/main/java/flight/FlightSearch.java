@@ -19,6 +19,9 @@ public class FlightSearch {
     private static final DateTimeFormatter DATE_FMT =
             DateTimeFormatter.ofPattern("dd/MM/uuuu").withResolverStyle(ResolverStyle.STRICT);
 
+    // ✅ Allowed airports
+    private static final String[] VALID_AIRPORTS = {"syd", "mel", "lax", "cdg", "del", "pvg", "doh"};
+
     public boolean runFlightSearch(String departureDate,    String departureAirportCode,   boolean emergencyRowSeating,
                                    String returnDate,       String destinationAirportCode, String seatingClass,
                                    int adultPassengerCount, int childPassengerCount,       int infantPassengerCount) {
@@ -85,6 +88,19 @@ public class FlightSearch {
         // ✅ Condition 10: only economy can have emergency row seating
         if (emergencyRowSeating && !"economy".equals(seatingClass)) {
             return false;
+        }
+
+        // ✅ Condition 11: validate airport codes and ensure departure ≠ destination
+        boolean validDeparture = false, validDestination = false;
+        for (String code : VALID_AIRPORTS) {
+            if (code.equals(departureAirportCode)) validDeparture = true;
+            if (code.equals(destinationAirportCode)) validDestination = true;
+        }
+        if (!validDeparture || !validDestination) {
+            return false; // invalid airport code
+        }
+        if (departureAirportCode.equals(destinationAirportCode)) {
+            return false; // cannot depart and arrive at same airport
         }
 
         // --- initialise attributes when all checks pass ---
