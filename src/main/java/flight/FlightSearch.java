@@ -58,7 +58,6 @@ public class FlightSearch {
             depDate = LocalDate.parse(departureDate, DATE_FMT);
             retDate = LocalDate.parse(returnDate, DATE_FMT);
         } catch (Exception e) {
-            // Invalid date format or impossible date (e.g. 31/04/2026, 29/02/2026)
             return false;
         }
 
@@ -73,7 +72,7 @@ public class FlightSearch {
             return false;
         }
 
-        // ✅ Condition 9: seating class must be from the allowed set
+        // ✅ Condition 9: seating class must be one of the allowed values
         boolean classOk =
                 "economy".equals(seatingClass) ||
                         "premium economy".equals(seatingClass) ||
@@ -83,7 +82,12 @@ public class FlightSearch {
             return false;
         }
 
-        // --- initialise attributes when all checks pass so far ---
+        // ✅ Condition 10: only economy can have emergency row seating
+        if (emergencyRowSeating && !"economy".equals(seatingClass)) {
+            return false;
+        }
+
+        // --- initialise attributes when all checks pass ---
         this.departureDate          = departureDate;
         this.departureAirportCode   = departureAirportCode;
         this.emergencyRowSeating    = emergencyRowSeating;
