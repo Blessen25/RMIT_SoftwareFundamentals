@@ -14,14 +14,26 @@ public class FlightSearch {
     public boolean runFlightSearch(String departureDate,    String departureAirportCode,   boolean emergencyRowSeating,
                                    String returnDate,       String destinationAirportCode, String seatingClass,
                                    int adultPassengerCount, int childPassengerCount,       int infantPassengerCount) {
-        boolean valid = true;
 
-        //TODO: Validate all the provided parameters.
-        //if the search parameters meets the given conditions,
-        //   the function should initialise all the class attributes and return true.
-        //else
-        //   the function should return false
+        // ✅ Condition 1: total passengers must be between 1 and 9
+        int totalPassengers = adultPassengerCount + childPassengerCount + infantPassengerCount;
+        if (totalPassengers < 1 || totalPassengers > 9) {
+            // invalid → do not initialise, just return false
+            return false;
+        }
 
-        return valid;
+        // --- initialise attributes when valid ---
+        this.departureDate          = departureDate;
+        this.departureAirportCode   = departureAirportCode;
+        this.emergencyRowSeating    = emergencyRowSeating;
+        this.returnDate             = returnDate;
+        this.destinationAirportCode = destinationAirportCode;
+        this.seatingClass           = seatingClass;
+        this.adultPassengerCount    = adultPassengerCount;
+        this.childPassengerCount    = childPassengerCount;
+        this.infantPassengerCount   = infantPassengerCount;
+
+        // valid so far
+        return true;
     }
 }
