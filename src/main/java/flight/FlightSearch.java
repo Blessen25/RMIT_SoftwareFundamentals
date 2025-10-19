@@ -32,13 +32,13 @@ public class FlightSearch {
         // ✅ Condition 2: children cannot be in emergency row or first class
         if (childPassengerCount > 0) {
             if (emergencyRowSeating) return false;
-            if ("first".equalsIgnoreCase(seatingClass)) return false;
+            if ("first".equals(seatingClass)) return false;
         }
 
         // ✅ Condition 3: infants cannot be in emergency row or business class
         if (infantPassengerCount > 0) {
             if (emergencyRowSeating) return false;
-            if ("business".equalsIgnoreCase(seatingClass)) return false;
+            if ("business".equals(seatingClass)) return false;
         }
 
         // ✅ Condition 4: at most 2 children per adult
@@ -70,6 +70,16 @@ public class FlightSearch {
 
         // ✅ Condition 8: return date cannot be before departure
         if (retDate.isBefore(depDate)) {
+            return false;
+        }
+
+        // ✅ Condition 9: seating class must be from the allowed set
+        boolean classOk =
+                "economy".equals(seatingClass) ||
+                        "premium economy".equals(seatingClass) ||
+                        "business".equals(seatingClass) ||
+                        "first".equals(seatingClass);
+        if (!classOk) {
             return false;
         }
 
