@@ -46,6 +46,11 @@ public class FlightSearch {
             return false;
         }
 
+        // ✅ Condition 5: at most 1 infant per adult
+        if (infantPassengerCount > adultPassengerCount) {
+            return false;
+        }
+
         // --- initialise attributes when all checks pass so far ---
         this.departureDate          = departureDate;
         this.departureAirportCode   = departureAirportCode;
