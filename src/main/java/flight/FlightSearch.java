@@ -1,5 +1,9 @@
 package flight;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.ResolverStyle;
+
 public class FlightSearch {
     private String  departureDate;
     private String  departureAirportCode;
@@ -10,6 +14,10 @@ public class FlightSearch {
     private int     adultPassengerCount;
     private int     childPassengerCount;
     private int     infantPassengerCount;
+
+    // Strict date format: dd/MM/yyyy with real calendar validation (leap years, month lengths)
+    private static final DateTimeFormatter DATE_FMT =
+            DateTimeFormatter.ofPattern("dd/MM/uuuu").withResolverStyle(ResolverStyle.STRICT);
 
     public boolean runFlightSearch(String departureDate,    String departureAirportCode,   boolean emergencyRowSeating,
                                    String returnDate,       String destinationAirportCode, String seatingClass,
@@ -48,6 +56,23 @@ public class FlightSearch {
 
         // ✅ Condition 5: at most 1 infant per adult
         if (infantPassengerCount > adultPassengerCount) {
+            return false;
+        }
+
+        // ✅ Parse dates strictly (foundation for C6/C7/C8)
+        final LocalDate depDate;
+        final LocalDate retDate;
+        try {
+            depDate = LocalDate.parse(departureDate, DATE_FMT);
+            retDate = LocalDate.parse(returnDate, DATE_FMT);
+        } catch (Exception e) {
+            // Invalid format or impossible calendar date (e.g., 31/04/2026) → invalid
+            return false;
+        }
+
+        // ✅ Condition 6: departure cannot be in the past (today is allowed)
+        LocalDate today = LocalDate.now();
+        if (depDate.isBefore(today)) {
             return false;
         }
 
