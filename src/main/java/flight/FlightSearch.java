@@ -18,11 +18,20 @@ public class FlightSearch {
         // ✅ Condition 1: total passengers must be between 1 and 9
         int totalPassengers = adultPassengerCount + childPassengerCount + infantPassengerCount;
         if (totalPassengers < 1 || totalPassengers > 9) {
-            // invalid → do not initialise, just return false
-            return false;
+            return false; // invalid total passenger count
         }
 
-        // --- initialise attributes when valid ---
+        // ✅ Condition 2: children cannot be in emergency row or first class
+        if (childPassengerCount > 0) {
+            if (emergencyRowSeating) {
+                return false; // no children in emergency row
+            }
+            if ("first".equalsIgnoreCase(seatingClass)) {
+                return false; // no children in first class
+            }
+        }
+
+        // --- initialise attributes when valid so far ---
         this.departureDate          = departureDate;
         this.departureAirportCode   = departureAirportCode;
         this.emergencyRowSeating    = emergencyRowSeating;
@@ -33,7 +42,6 @@ public class FlightSearch {
         this.childPassengerCount    = childPassengerCount;
         this.infantPassengerCount   = infantPassengerCount;
 
-        // valid so far
         return true;
     }
 }
