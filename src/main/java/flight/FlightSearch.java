@@ -24,10 +24,10 @@ public class FlightSearch {
         // ✅ Condition 2: children cannot be in emergency row or first class
         if (childPassengerCount > 0) {
             if (emergencyRowSeating) {
-                return false;
+                return false; // no children in emergency row
             }
             if ("first".equalsIgnoreCase(seatingClass)) {
-                return false;
+                return false; // no children in first class
             }
         }
 
@@ -39,6 +39,11 @@ public class FlightSearch {
             if ("business".equalsIgnoreCase(seatingClass)) {
                 return false; // infants not in business class
             }
+        }
+
+        // ✅ Condition 4: at most 2 children per adult
+        if (childPassengerCount > 2 * adultPassengerCount) {
+            return false;
         }
 
         // --- initialise attributes when all checks pass so far ---
