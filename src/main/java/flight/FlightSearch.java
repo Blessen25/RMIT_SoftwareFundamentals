@@ -31,22 +31,14 @@ public class FlightSearch {
 
         // ✅ Condition 2: children cannot be in emergency row or first class
         if (childPassengerCount > 0) {
-            if (emergencyRowSeating) {
-                return false;
-            }
-            if ("first".equalsIgnoreCase(seatingClass)) {
-                return false;
-            }
+            if (emergencyRowSeating) return false;
+            if ("first".equalsIgnoreCase(seatingClass)) return false;
         }
 
         // ✅ Condition 3: infants cannot be in emergency row or business class
         if (infantPassengerCount > 0) {
-            if (emergencyRowSeating) {
-                return false;
-            }
-            if ("business".equalsIgnoreCase(seatingClass)) {
-                return false;
-            }
+            if (emergencyRowSeating) return false;
+            if ("business".equalsIgnoreCase(seatingClass)) return false;
         }
 
         // ✅ Condition 4: at most 2 children per adult
@@ -59,20 +51,25 @@ public class FlightSearch {
             return false;
         }
 
-        // ✅ Conditions 6 + 7: strict format & leap-year check
+        // ✅ Conditions 6 + 7: strict format & leap-year validation
         final LocalDate depDate;
         final LocalDate retDate;
         try {
             depDate = LocalDate.parse(departureDate, DATE_FMT);
             retDate = LocalDate.parse(returnDate, DATE_FMT);
         } catch (Exception e) {
-            // Invalid date format or impossible date (e.g. 31/04/2026 or 29/02/2026)
+            // Invalid date format or impossible date (e.g. 31/04/2026, 29/02/2026)
             return false;
         }
 
-        // ✅ Condition 6 (reconfirmed): departure cannot be in the past
+        // ✅ Condition 6: departure cannot be in the past (today allowed)
         LocalDate today = LocalDate.now();
         if (depDate.isBefore(today)) {
+            return false;
+        }
+
+        // ✅ Condition 8: return date cannot be before departure
+        if (retDate.isBefore(depDate)) {
             return false;
         }
 
