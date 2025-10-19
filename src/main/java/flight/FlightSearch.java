@@ -116,4 +116,39 @@ public class FlightSearch {
 
         return true;
     }
+    public String getDepartureDate() {
+        return departureDate;
+    }
+
+    public String getDepartureAirportCode() {
+        return departureAirportCode;
+    }
+
+    public boolean isEmergencyRowSeating() {
+        return emergencyRowSeating;
+    }
+
+    public String getReturnDate() {
+        return returnDate;
+    }
+
+    public String getDestinationAirportCode() {
+        return destinationAirportCode;
+    }
+
+    public String getSeatingClass() {
+        return seatingClass;
+    }
+
+    public int getAdultPassengerCount() {
+        return adultPassengerCount;
+    }
+
+    public int getChildPassengerCount() {
+        return childPassengerCount;
+    }
+
+    public int getInfantPassengerCount() {
+        return infantPassengerCount;
+    }
 }
