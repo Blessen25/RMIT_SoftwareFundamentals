@@ -15,7 +15,7 @@ public class FlightSearch {
     private int     childPassengerCount;
     private int     infantPassengerCount;
 
-    // Strict date format: dd/MM/yyyy with real calendar validation (leap years, month lengths)
+    // Strict date format validation (handles leap years, correct day/month combinations)
     private static final DateTimeFormatter DATE_FMT =
             DateTimeFormatter.ofPattern("dd/MM/uuuu").withResolverStyle(ResolverStyle.STRICT);
 
@@ -32,20 +32,20 @@ public class FlightSearch {
         // ✅ Condition 2: children cannot be in emergency row or first class
         if (childPassengerCount > 0) {
             if (emergencyRowSeating) {
-                return false; // no children in emergency row
+                return false;
             }
             if ("first".equalsIgnoreCase(seatingClass)) {
-                return false; // no children in first class
+                return false;
             }
         }
 
         // ✅ Condition 3: infants cannot be in emergency row or business class
         if (infantPassengerCount > 0) {
             if (emergencyRowSeating) {
-                return false; // infants not in emergency row
+                return false;
             }
             if ("business".equalsIgnoreCase(seatingClass)) {
-                return false; // infants not in business class
+                return false;
             }
         }
 
@@ -59,18 +59,18 @@ public class FlightSearch {
             return false;
         }
 
-        // ✅ Parse dates strictly (foundation for C6/C7/C8)
+        // ✅ Conditions 6 + 7: strict format & leap-year check
         final LocalDate depDate;
         final LocalDate retDate;
         try {
             depDate = LocalDate.parse(departureDate, DATE_FMT);
             retDate = LocalDate.parse(returnDate, DATE_FMT);
         } catch (Exception e) {
-            // Invalid format or impossible calendar date (e.g., 31/04/2026) → invalid
+            // Invalid date format or impossible date (e.g. 31/04/2026 or 29/02/2026)
             return false;
         }
 
-        // ✅ Condition 6: departure cannot be in the past (today is allowed)
+        // ✅ Condition 6 (reconfirmed): departure cannot be in the past
         LocalDate today = LocalDate.now();
         if (depDate.isBefore(today)) {
             return false;
